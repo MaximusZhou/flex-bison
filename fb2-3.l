@@ -56,7 +56,9 @@ int main(int argc, char **argv)
   }
 
   if(newfile(argv[1]))
+  {
     yylex();
+  }
 
   return 0;
 }
@@ -71,7 +73,7 @@ int newfile(char *fn)
   if(!bs) { perror("malloc"); exit(1); }
 
   /* remember state */
-  if(curbs)curbs->lineno = yylineno;
+  if(curbs) curbs->lineno = yylineno;
   bs->prev = curbs;
 
   /* set up current entry */
@@ -108,4 +110,3 @@ int popfile(void)
   curfilename = curbs->filename;
   return 1; 
 }
-
