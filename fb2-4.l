@@ -158,7 +158,7 @@ void printrefs()
   {
     char *prevfn = NULL;	/* 最近打印的文件名，防止重复打印 */
 
-    /* 翻转引用表 */
+    /* 翻转引用表，这种错误顺序来建立的列表，然后再翻转的技巧是非常有用，并且经常使用 */
     struct ref *rp = sp->reflist;
     struct ref *rpp = 0;	/* 上一个 ref */
     struct ref *rpn;	/* 下一个 ref */
