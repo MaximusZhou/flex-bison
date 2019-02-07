@@ -1,7 +1,7 @@
 /* 
 * fb2-3 skeleton for include files
 * $flex fb2-3.l
-* $cc -o fb3-1 lex.yy.c
+* $cc -o fb2-3 lex.yy.c
 * $./fb2-3  test_include.c
 */
 

@@ -156,12 +156,12 @@ void printrefs()
 
   for(sp = symtab; sp->name && sp < symtab+NHASH; sp++)
   {
-    char *prevfn = NULL;	/* last printed filename, to skip dups */
+    char *prevfn = NULL;	/* 最近打印的文件名，防止重复打印 */
 
     /* 翻转引用表 */
     struct ref *rp = sp->reflist;
-    struct ref *rpp = 0;	/* previous ref */
-    struct ref *rpn;	/* next ref */
+    struct ref *rpp = 0;	/* 上一个 ref */
+    struct ref *rpn;	/* 下一个 ref */
 
     do {
       rpn = rp->next;
@@ -170,14 +170,20 @@ void printrefs()
       rp = rpn;
     } while(rp);
 
-    /* now print the word and its references */
+    /* 打印word和其引用的信息 */
     printf("%10s", sp->name);
-    for(rp = rpp; rp; rp = rp->next) {
-      if(rp->filename == prevfn) {
-	printf(" %d", rp->lineno);
-      } else {
-	printf(" %s:%d", rp->filename, rp->lineno);
-	prevfn = rp->filename;
+    for(rp = rpp; rp; rp = rp->next)
+	{
+      if(rp->filename == prevfn)
+	  {
+		  /* 相同文件名只打印行号 */
+		  printf(" %d", rp->lineno);
+      }
+	  else
+	  {
+		  /* 新的文件，打印相应的文件名和行号 */
+		  printf(" %s:%d", rp->filename, rp->lineno);
+		  prevfn = rp->filename;
       }
     }
     printf("\n");
@@ -188,24 +194,30 @@ int main(int argc, char **argv)
 {
   int i;
 
-  if(argc < 2) { /* just read stdin */
+  if(argc < 2)
+  { /* 从 stdin 读取数据 */
     curfilename = "(stdin)";
     yylineno = 1;
     yylex();
-  } else
-  for(i = 1; i < argc; i++) {
-    FILE *f = fopen(argv[i], "r");
-  
-    if(!f) {
-      perror(argv[1]);
-      return (1);
-    }
-    curfilename = argv[i];	/* for addref */
+  }
+  else
+  {
+	for(i = 1; i < argc; i++)
+	{
+	  FILE *f = fopen(argv[i], "r");
 
-    yyrestart(f);
-    yylineno = 1;
-    yylex();
-    fclose(f);
+	  if(!f)
+	  {
+		perror(argv[1]);
+		return (1);
+	  }
+	  
+	  curfilename = argv[i];
+	  yyrestart(f);
+	  yylineno = 1; /* 新的文件，重置yylineno为1 */
+	  yylex();
+	  fclose(f);
+	}
   }
 
   printf("old = %d, new = %d, total = %d, probes = %d, avg = %1.2f\n",
