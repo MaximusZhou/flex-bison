@@ -1,4 +1,9 @@
 /* 基于抽象语法树的计算器对应的C程序 */
+/*
+* $bison -d fb3-1.y
+* $flex -o fb3-1.lex.c fb3-1.l
+* $cc -o fb3-1 fb3-1.tab.c fb3-1.lex.c fb3-1funcs.c
+*/
 
 #  include <stdio.h>
 #  include <stdlib.h>
